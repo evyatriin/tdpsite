@@ -81,9 +81,15 @@
         "viewProfile": "ప్రొఫైల్ చూడండి",
         "designation": "హోదా",
         "constituency": "నియోజకవర్గం",
+        "state": "రాష్ట్రం",
         "bio": "గురించి",
         "socialMedia": "సోషల్ మీడియా",
-        "mediaBytes": "మీడియా బైట్స్"
+        "socialLinks": "సోషల్ మీడియా లింక్‌లు",
+        "mediaBytes": "మీడియా బైట్స్",
+        "filterByState": "రాష్ట్రం ద్వారా ఫిల్టర్ చేయండి",
+        "noLeaders": "నేతలు కనుగొనబడలేదు",
+        "noLeadersInState": "ఈ రాష్ట్రంలో నేతలు కనుగొనబడలేదు",
+        "backToLeaders": "నేతలకు తిరిగి వెళ్ళండి"
     },
     "auth": {
         "login": "లాగిన్",

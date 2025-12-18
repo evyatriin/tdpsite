@@ -176,6 +176,7 @@ async function main() {
         update: {},
         create: {
             userId: leader.id,
+            slug: 'demo-leader',
             designation: 'MLA',
             constituency: 'Guntur Central',
             bio: 'Dedicated to serving the people of Guntur with TDP values.',

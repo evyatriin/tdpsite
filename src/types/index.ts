@@ -69,6 +69,7 @@ export interface MediaByte {
 
 export interface LeaderProfile {
     id: string;
+    slug: string;
     userId: string;
     user?: User;
     photoUrl?: string;

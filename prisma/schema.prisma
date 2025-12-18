@@ -173,6 +173,7 @@ model MediaByte {
 
 model LeaderProfile {
   id           String  @id @default(cuid())
+  slug         String  @unique
   user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String  @unique
   photoUrl     String?
@@ -186,6 +187,8 @@ model LeaderProfile {
   isVerified   Boolean @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  @@index([slug])
 }
 
 // ============================================

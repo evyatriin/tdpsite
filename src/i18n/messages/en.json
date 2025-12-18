@@ -81,9 +81,15 @@
         "viewProfile": "View Profile",
         "designation": "Designation",
         "constituency": "Constituency",
+        "state": "State",
         "bio": "About",
         "socialMedia": "Social Media",
-        "mediaBytes": "Media Bytes"
+        "socialLinks": "Social Media Links",
+        "mediaBytes": "Media Bytes",
+        "filterByState": "Filter by State",
+        "noLeaders": "No leaders found",
+        "noLeadersInState": "No leaders found in this state",
+        "backToLeaders": "Back to Leaders"
     },
     "auth": {
         "login": "Login",
