@@ -13,6 +13,8 @@ async function main() {
         create: { key: 'auto_approve_posts', value: 'true' },
     });
 
+    console.log('✅ App settings created');
+
     // Create States
     const andhraState = await prisma.state.upsert({
         where: { name: 'Andhra Pradesh' },
@@ -28,22 +30,16 @@ async function main() {
 
     console.log('✅ States created');
 
-    // Andhra Pradesh Districts (13 districts)
+    // Andhra Pradesh Districts
     const apDistricts = [
-        { name: 'Anantapur', nameTE: 'అనంతపురం' },
-        { name: 'Chittoor', nameTE: 'చిత్తూరు' },
-        { name: 'East Godavari', nameTE: 'తూర్పు గోదావరి' },
+        { name: 'Visakhapatnam', nameTE: 'విశాఖపట్నం' },
         { name: 'Guntur', nameTE: 'గుంటూరు' },
         { name: 'Krishna', nameTE: 'కృష్ణా' },
-        { name: 'Kurnool', nameTE: 'కర్నూలు' },
-        { name: 'Nellore', nameTE: 'నెల్లూరు' },
-        { name: 'Prakasam', nameTE: 'ప్రకాశం' },
-        { name: 'Srikakulam', nameTE: 'శ్రీకాకుళం' },
-        { name: 'Visakhapatnam', nameTE: 'విశాఖపట్నం' },
-        { name: 'Vizianagaram', nameTE: 'విజయనగరం' },
-        { name: 'West Godavari', nameTE: 'పశ్చిమ గోదావరి' },
-        { name: 'YSR Kadapa', nameTE: 'వైఎస్ఆర్ కడప' },
+        { name: 'East Godavari', nameTE: 'తూర్పు గోదావరి' },
+        { name: 'Chittoor', nameTE: 'చిత్తూరు' },
     ];
+
+    const createdDistricts: Record<string, string> = {};
 
     for (const districtData of apDistricts) {
         const district = await prisma.district.upsert({
@@ -57,15 +53,16 @@ async function main() {
                 stateId: andhraState.id,
             },
         });
+        createdDistricts[districtData.name] = district.id;
 
-        // Add some sample constituencies
-        const sampleConstituencies = [
-            `${districtData.name} (Urban)`,
-            `${districtData.name} (Rural)`,
+        // Add constituencies for each district
+        const constituencies = [
             `${districtData.name} Central`,
+            `${districtData.name} North`,
+            `${districtData.name} South`,
         ];
 
-        for (const consName of sampleConstituencies) {
+        for (const consName of constituencies) {
             await prisma.constituency.upsert({
                 where: {
                     districtId_name: { districtId: district.id, name: consName }
@@ -81,40 +78,11 @@ async function main() {
 
     console.log('✅ Andhra Pradesh districts and constituencies created');
 
-    // Telangana Districts (33 districts)
+    // Telangana Districts (sample)
     const telanganaDistricts = [
-        { name: 'Adilabad', nameTE: 'ఆదిలాబాద్' },
-        { name: 'Bhadradri Kothagudem', nameTE: 'భద్రాద్రి కొత్తగూడెం' },
         { name: 'Hyderabad', nameTE: 'హైదరాబాద్' },
-        { name: 'Jagtial', nameTE: 'జగిత్యాల' },
-        { name: 'Jangaon', nameTE: 'జనగాం' },
-        { name: 'Jayashankar Bhupalpally', nameTE: 'జయశంకర్ భూపాలపల్లి' },
-        { name: 'Jogulamba Gadwal', nameTE: 'జోగులాంబ గద్వాల' },
-        { name: 'Kamareddy', nameTE: 'కామారెడ్డి' },
-        { name: 'Karimnagar', nameTE: 'కరీంనగర్' },
-        { name: 'Khammam', nameTE: 'ఖమ్మం' },
-        { name: 'Komaram Bheem Asifabad', nameTE: 'కొమరం భీం ఆసిఫాబాద్' },
-        { name: 'Mahabubnagar', nameTE: 'మహబూబ్ నగర్' },
-        { name: 'Mancherial', nameTE: 'మంచిర్యాల' },
-        { name: 'Medak', nameTE: 'మెదక్' },
-        { name: 'Medchal-Malkajgiri', nameTE: 'మేడ్చల్-మల్కాజిగిరి' },
-        { name: 'Mulugu', nameTE: 'ములుగు' },
-        { name: 'Nagarkurnool', nameTE: 'నాగర్‌కర్నూల్' },
-        { name: 'Nalgonda', nameTE: 'నల్గొండ' },
-        { name: 'Narayanpet', nameTE: 'నారాయణపేట' },
-        { name: 'Nirmal', nameTE: 'నిర్మల్' },
-        { name: 'Nizamabad', nameTE: 'నిజామాబాద్' },
-        { name: 'Peddapalli', nameTE: 'పెద్దపల్లి' },
-        { name: 'Rajanna Sircilla', nameTE: 'రాజన్న సిరిసిల్ల' },
         { name: 'Rangareddy', nameTE: 'రంగారెడ్డి' },
-        { name: 'Sangareddy', nameTE: 'సంగారెడ్డి' },
-        { name: 'Siddipet', nameTE: 'సిద్దిపేట' },
-        { name: 'Suryapet', nameTE: 'సూర్యాపేట' },
-        { name: 'Vikarabad', nameTE: 'వికారాబాద్' },
-        { name: 'Wanaparthy', nameTE: 'వనపర్తి' },
-        { name: 'Warangal Rural', nameTE: 'వరంగల్ రూరల్' },
-        { name: 'Warangal Urban', nameTE: 'వరంగల్ అర్బన్' },
-        { name: 'Yadadri Bhuvanagiri', nameTE: 'యాదాద్రి భువనగిరి' },
+        { name: 'Warangal', nameTE: 'వరంగల్' },
     ];
 
     for (const districtData of telanganaDistricts) {
@@ -130,13 +98,8 @@ async function main() {
             },
         });
 
-        // Add some sample constituencies
-        const sampleConstituencies = [
-            `${districtData.name} (Urban)`,
-            `${districtData.name} (Rural)`,
-        ];
-
-        for (const consName of sampleConstituencies) {
+        const constituencies = [`${districtData.name} Urban`, `${districtData.name} Rural`];
+        for (const consName of constituencies) {
             await prisma.constituency.upsert({
                 where: {
                     districtId_name: { districtId: district.id, name: consName }
@@ -152,15 +115,18 @@ async function main() {
 
     console.log('✅ Telangana districts and constituencies created');
 
-    // Create Super Admin user
-    const passwordHash = await bcrypt.hash('admin123', 12);
+    // ============================================
+    // Create Demo Users with Credentials
+    // ============================================
+    const passwordHash = await bcrypt.hash('demo123', 12);
 
+    // Super Admin
     const superAdmin = await prisma.user.upsert({
-        where: { mobile: '9999999999' },
+        where: { mobile: '9999900000' },
         update: {},
         create: {
             name: 'Super Admin',
-            mobile: '9999999999',
+            mobile: '9999900000',
             passwordHash,
             role: 'SUPER_ADMIN',
             state: 'Andhra Pradesh',
@@ -168,43 +134,215 @@ async function main() {
             canPost: true,
         },
     });
+    console.log('✅ Super Admin created: 9999900000 / demo123');
 
-    console.log('✅ Super Admin created (mobile: 9999999999, password: admin123)');
-
-    // Create sample invite codes
-    await prisma.inviteCode.upsert({
-        where: { code: 'CADRE001' },
+    // Admin
+    const admin = await prisma.user.upsert({
+        where: { mobile: '9999900001' },
         update: {},
         create: {
-            code: 'CADRE001',
-            role: 'CADRE',
-            createdById: superAdmin.id,
-        },
-    });
-
-    await prisma.inviteCode.upsert({
-        where: { code: 'LEADER01' },
-        update: {},
-        create: {
-            code: 'LEADER01',
-            role: 'LEADER',
-            createdById: superAdmin.id,
-        },
-    });
-
-    await prisma.inviteCode.upsert({
-        where: { code: 'ADMIN001' },
-        update: {},
-        create: {
-            code: 'ADMIN001',
+            name: 'Demo Admin',
+            mobile: '9999900001',
+            passwordHash,
             role: 'ADMIN',
-            createdById: superAdmin.id,
+            state: 'Andhra Pradesh',
+            district: 'Visakhapatnam',
+            isActive: true,
+            canPost: true,
+        },
+    });
+    console.log('✅ Admin created: 9999900001 / demo123');
+
+    // Leader
+    const leader = await prisma.user.upsert({
+        where: { mobile: '9999900002' },
+        update: {},
+        create: {
+            name: 'Demo Leader',
+            mobile: '9999900002',
+            passwordHash,
+            role: 'LEADER',
+            state: 'Andhra Pradesh',
+            district: 'Guntur',
+            constituency: 'Guntur Central',
+            isActive: true,
+            canPost: true,
         },
     });
 
-    console.log('✅ Sample invite codes created: CADRE001, LEADER01, ADMIN001');
+    // Create leader profile
+    await prisma.leaderProfile.upsert({
+        where: { userId: leader.id },
+        update: {},
+        create: {
+            userId: leader.id,
+            designation: 'MLA',
+            constituency: 'Guntur Central',
+            bio: 'Dedicated to serving the people of Guntur with TDP values.',
+            photoUrl: null,
+            socialLinks: {
+                youtube: 'https://youtube.com/@TDP',
+                twitter: 'https://twitter.com/JaiTDP',
+            },
+            isVerified: true,
+        },
+    });
+    console.log('✅ Leader created: 9999900002 / demo123');
 
-    console.log('🎉 Database seeding completed!');
+    // Cadres
+    const cadre1 = await prisma.user.upsert({
+        where: { mobile: '9999900003' },
+        update: {},
+        create: {
+            name: 'Demo Cadre 1',
+            mobile: '9999900003',
+            passwordHash,
+            role: 'CADRE',
+            state: 'Andhra Pradesh',
+            district: 'Visakhapatnam',
+            constituency: 'Visakhapatnam Central',
+            isActive: true,
+            canPost: true,
+        },
+    });
+
+    const cadre2 = await prisma.user.upsert({
+        where: { mobile: '9999900004' },
+        update: {},
+        create: {
+            name: 'Demo Cadre 2',
+            mobile: '9999900004',
+            passwordHash,
+            role: 'CADRE',
+            state: 'Andhra Pradesh',
+            district: 'Krishna',
+            constituency: 'Krishna Central',
+            isActive: true,
+            canPost: true,
+        },
+    });
+    console.log('✅ Cadres created: 9999900003, 9999900004 / demo123');
+
+    // ============================================
+    // Create Sample Invite Codes
+    // ============================================
+    const inviteCodes = [
+        { code: 'CADRE2024', role: 'CADRE' as const },
+        { code: 'LEADER2024', role: 'LEADER' as const },
+        { code: 'ADMIN2024', role: 'ADMIN' as const },
+    ];
+
+    for (const invite of inviteCodes) {
+        await prisma.inviteCode.upsert({
+            where: { code: invite.code },
+            update: {},
+            create: {
+                code: invite.code,
+                role: invite.role,
+                createdById: superAdmin.id,
+            },
+        });
+    }
+    console.log('✅ Invite codes created: CADRE2024, LEADER2024, ADMIN2024');
+
+    // ============================================
+    // Create Sample Events
+    // ============================================
+    const sampleEvents = [
+        {
+            title: 'Community Health Camp in Visakhapatnam',
+            category: 'WELFARE' as const,
+            description: 'Free health checkup camp organized for the residents of Visakhapatnam Central constituency. Over 500 people benefited from this initiative.',
+            state: 'Andhra Pradesh',
+            district: 'Visakhapatnam',
+            constituency: 'Visakhapatnam Central',
+            userId: cadre1.id,
+        },
+        {
+            title: 'Youth Awareness Program',
+            category: 'OUTREACH' as const,
+            description: 'Conducted youth awareness program about employment opportunities and skill development in the region.',
+            state: 'Andhra Pradesh',
+            district: 'Visakhapatnam',
+            constituency: 'Visakhapatnam North',
+            userId: cadre1.id,
+        },
+        {
+            title: 'Party Meeting in Krishna District',
+            category: 'MEETING' as const,
+            description: 'Monthly coordination meeting with local party workers to discuss upcoming initiatives and feedback from the community.',
+            state: 'Andhra Pradesh',
+            district: 'Krishna',
+            constituency: 'Krishna Central',
+            userId: cadre2.id,
+        },
+        {
+            title: 'Tree Plantation Drive',
+            category: 'SOCIAL_SERVICE' as const,
+            description: 'Organized a tree plantation drive with volunteers planting over 200 saplings in the local area.',
+            state: 'Andhra Pradesh',
+            district: 'Krishna',
+            constituency: 'Krishna South',
+            userId: cadre2.id,
+        },
+        {
+            title: 'Blood Donation Camp',
+            category: 'WELFARE' as const,
+            description: 'Successful blood donation camp organized in collaboration with local hospitals. 150+ units of blood collected.',
+            state: 'Andhra Pradesh',
+            district: 'Guntur',
+            constituency: 'Guntur Central',
+            userId: cadre1.id,
+        },
+    ];
+
+    for (const eventData of sampleEvents) {
+        await prisma.event.create({
+            data: {
+                ...eventData,
+                status: 'APPROVED',
+                language: 'en',
+            },
+        });
+    }
+    console.log('✅ Sample events created');
+
+    // ============================================
+    // Create Sample Media Bytes
+    // ============================================
+    const sampleMediaBytes = [
+        {
+            videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+            message: 'Message to the people of Andhra Pradesh about our vision for development.',
+            userId: leader.id,
+        },
+    ];
+
+    for (const mbData of sampleMediaBytes) {
+        await prisma.mediaByte.create({
+            data: {
+                ...mbData,
+                videoType: 'youtube',
+                language: 'en',
+            },
+        });
+    }
+    console.log('✅ Sample media bytes created');
+
+    console.log('\n🎉 Database seeding completed!\n');
+    console.log('═══════════════════════════════════════════════════════');
+    console.log('                    DEMO CREDENTIALS');
+    console.log('═══════════════════════════════════════════════════════');
+    console.log('');
+    console.log('  SUPER ADMIN:  9999900000 / demo123');
+    console.log('  ADMIN:        9999900001 / demo123');
+    console.log('  LEADER:       9999900002 / demo123');
+    console.log('  CADRE 1:      9999900003 / demo123');
+    console.log('  CADRE 2:      9999900004 / demo123');
+    console.log('');
+    console.log('  INVITE CODES: CADRE2024, LEADER2024, ADMIN2024');
+    console.log('');
+    console.log('═══════════════════════════════════════════════════════');
 }
 
 main()
