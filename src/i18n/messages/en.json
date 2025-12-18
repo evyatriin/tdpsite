@@ -1,0 +1,149 @@
+{
+    "nav": {
+        "home": "Home",
+        "leaderSpeaks": "Leader Speaks",
+        "leaders": "Leaders",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "dashboard": "Dashboard",
+        "admin": "Admin Panel"
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Retry",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "submit": "Submit",
+        "search": "Search",
+        "filter": "Filter",
+        "clear": "Clear",
+        "share": "Share",
+        "viewMore": "View More",
+        "noResults": "No results found",
+        "selectState": "Select State",
+        "selectDistrict": "Select District",
+        "selectConstituency": "Select Constituency",
+        "allStates": "All States",
+        "allDistricts": "All Districts",
+        "allConstituencies": "All Constituencies",
+        "allCategories": "All Categories"
+    },
+    "home": {
+        "title": "TDP - Telugu Desam Party",
+        "subtitle": "Ground Activity • Digital Visibility • Measurable Impact",
+        "latestEvents": "Latest Events",
+        "featuredLeaders": "Leader Speaks",
+        "topConstituencies": "Most Active Constituencies",
+        "filterEvents": "Filter Events"
+    },
+    "events": {
+        "title": "Events",
+        "createEvent": "Create Event",
+        "eventTitle": "Event Title",
+        "category": "Category",
+        "description": "Description",
+        "location": "Location",
+        "images": "Images",
+        "socialLinks": "Social Media Links",
+        "addImage": "Add Image",
+        "addSocialLink": "Add Social Link",
+        "categories": {
+            "OUTREACH": "Outreach",
+            "WELFARE": "Welfare",
+            "MEETING": "Meeting",
+            "PROTEST": "Protest",
+            "SOCIAL_SERVICE": "Social Service"
+        },
+        "status": {
+            "PENDING": "Pending",
+            "APPROVED": "Approved",
+            "REJECTED": "Rejected"
+        },
+        "postedBy": "Posted by",
+        "on": "on",
+        "viewDetails": "View Details"
+    },
+    "mediaBytes": {
+        "title": "Leader Speaks",
+        "createMediaByte": "Create Media Byte",
+        "videoUrl": "YouTube Video URL",
+        "uploadVideo": "Upload Video",
+        "message": "Message (Optional)",
+        "views": "views",
+        "noMediaBytes": "No media bytes yet"
+    },
+    "leaders": {
+        "title": "Our Leaders",
+        "viewProfile": "View Profile",
+        "designation": "Designation",
+        "constituency": "Constituency",
+        "bio": "About",
+        "socialMedia": "Social Media",
+        "mediaBytes": "Media Bytes"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "mobile": "Mobile Number",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "name": "Full Name",
+        "inviteCode": "Invite Code",
+        "loginButton": "Sign In",
+        "registerButton": "Create Account",
+        "noAccount": "Don't have an account?",
+        "hasAccount": "Already have an account?",
+        "invalidCredentials": "Invalid mobile number or password",
+        "invalidInvite": "Invalid or expired invite code"
+    },
+    "comments": {
+        "title": "Comments",
+        "addComment": "Add a comment...",
+        "postComment": "Post",
+        "noComments": "No comments yet",
+        "loginToComment": "Login to comment"
+    },
+    "admin": {
+        "title": "Admin Dashboard",
+        "users": "Users",
+        "invites": "Invite Codes",
+        "moderation": "Moderation",
+        "analytics": "Analytics",
+        "settings": "Settings",
+        "generateInvite": "Generate Invite Code",
+        "userManagement": "User Management",
+        "contentModeration": "Content Moderation",
+        "autoApprove": "Auto-approve posts",
+        "disablePosting": "Disable Posting",
+        "enablePosting": "Enable Posting",
+        "deleteContent": "Delete Content",
+        "role": "Role",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
+    },
+    "analytics": {
+        "title": "Analytics Dashboard",
+        "totalEvents": "Total Events",
+        "eventsLast7Days": "Events (7 Days)",
+        "eventsLast30Days": "Events (30 Days)",
+        "eventsByState": "Events by State",
+        "eventsByDistrict": "Events by District",
+        "eventsOverTime": "Events Over Time",
+        "topConstituencies": "Top 10 Active Constituencies",
+        "topCadres": "Top 10 Active Cadres",
+        "mediaByteViews": "Media Byte Views"
+    },
+    "share": {
+        "shareOn": "Share on",
+        "whatsapp": "WhatsApp",
+        "twitter": "X (Twitter)",
+        "facebook": "Facebook",
+        "copyLink": "Copy Link",
+        "copied": "Link copied!"
+    }
+}

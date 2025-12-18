@@ -1,0 +1,260 @@
+// Prisma schema for TDP Social Network MVP
+// Using PostgreSQL with Supabase
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================
+// User & Authentication
+// ============================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  LEADER
+  CADRE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  mobile        String    @unique
+  passwordHash  String
+  role          UserRole  @default(CADRE)
+  state         String?
+  district      String?
+  constituency  String?
+  isActive      Boolean   @default(true)
+  canPost       Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  events        Event[]
+  mediaBytes    MediaByte[]
+  comments      Comment[]
+  leaderProfile LeaderProfile?
+  inviteCodes   InviteCode[]   @relation("CreatedInvites")
+  usedInvite    InviteCode?    @relation("UsedInvite", fields: [usedInviteId], references: [id])
+  usedInviteId  String?        @unique
+
+  @@index([role])
+  @@index([state, district])
+  @@index([isActive])
+}
+
+model InviteCode {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  role      UserRole
+  createdBy User      @relation("CreatedInvites", fields: [createdById], references: [id])
+  createdById String
+  usedBy    User?     @relation("UsedInvite")
+  used      Boolean   @default(false)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([code])
+  @@index([used])
+}
+
+// ============================================
+// Events (Cadre Posts)
+// ============================================
+
+enum EventCategory {
+  OUTREACH
+  WELFARE
+  MEETING
+  PROTEST
+  SOCIAL_SERVICE
+}
+
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Event {
+  id           String        @id @default(cuid())
+  title        String
+  category     EventCategory
+  description  String        @db.Text
+  state        String
+  district     String
+  constituency String
+  status       EventStatus   @default(APPROVED)
+  language     String        @default("en") // en or te (Telugu)
+  
+  // Author
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // Relations
+  images       EventImage[]
+  socialLinks  SocialLink[]
+  comments     Comment[]
+
+  @@index([state, district, constituency])
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model EventImage {
+  id       String @id @default(cuid())
+  url      String
+  order    Int    @default(0)
+  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId  String
+
+  @@index([eventId])
+}
+
+enum SocialPlatform {
+  YOUTUBE
+  TWITTER
+  FACEBOOK
+  INSTAGRAM
+}
+
+model SocialLink {
+  id           String         @id @default(cuid())
+  platform     SocialPlatform
+  url          String
+  thumbnailUrl String?
+  event        Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId      String
+
+  @@index([eventId])
+}
+
+// ============================================
+// Media Bytes (Leader Posts)
+// ============================================
+
+model MediaByte {
+  id        String   @id @default(cuid())
+  videoUrl  String   // YouTube URL or uploaded video path
+  videoType String   @default("youtube") // youtube or upload
+  message   String?  @db.Text
+  viewCount Int      @default(0)
+  language  String   @default("en")
+  
+  // Author (Leader)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  comments  Comment[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ============================================
+// Leader Profiles
+// ============================================
+
+model LeaderProfile {
+  id           String  @id @default(cuid())
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String  @unique
+  photoUrl     String?
+  designation  String
+  constituency String?
+  bio          String? @db.Text
+  
+  // Social links stored as JSON
+  socialLinks  Json?   // { youtube?: string, twitter?: string, facebook?: string, instagram?: string }
+  
+  isVerified   Boolean @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ============================================
+// Comments
+// ============================================
+
+model Comment {
+  id          String     @id @default(cuid())
+  content     String     @db.Text
+  
+  // Author
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  
+  // Polymorphic relation - either event or mediaByte
+  event       Event?     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String?
+  mediaByte   MediaByte? @relation(fields: [mediaByteId], references: [id], onDelete: Cascade)
+  mediaByteId String?
+  
+  createdAt   DateTime   @default(now())
+
+  @@index([eventId])
+  @@index([mediaByteId])
+  @@index([userId])
+}
+
+// ============================================
+// App Settings
+// ============================================
+
+model AppSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@index([key])
+}
+
+// ============================================
+// Location Hierarchy (Reference Data)
+// ============================================
+
+model State {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  nameTE    String?    // Telugu name
+  districts District[]
+}
+
+model District {
+  id             String         @id @default(cuid())
+  name           String
+  nameTE         String?
+  state          State          @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId        String
+  constituencies Constituency[]
+
+  @@unique([stateId, name])
+  @@index([stateId])
+}
+
+model Constituency {
+  id         String   @id @default(cuid())
+  name       String
+  nameTE     String?
+  district   District @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  districtId String
+
+  @@unique([districtId, name])
+  @@index([districtId])
+}
