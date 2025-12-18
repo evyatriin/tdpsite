@@ -28,6 +28,7 @@ export default function Navbar() {
             <nav className="navbar">
                 <div className="navbar-container">
                     <Link href="/" className="navbar-brand">
+                        <span className="navbar-logo">🚲</span>
                         <span>TDP</span>
                     </Link>
 

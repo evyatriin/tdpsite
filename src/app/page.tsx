@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import EventCard from '@/components/EventCard';
 import MediaByteCard from '@/components/MediaByteCard';
 import FilterBar from '@/components/FilterBar';
+import HeroCarousel from '@/components/HeroCarousel';
 import type { Event, MediaByte } from '@/types';
 
 export default function HomePage() {
@@ -66,88 +67,88 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Hero Carousel - At the top */}
+      <HeroCarousel />
+
+      {/* Filter Bar - Below banner */}
       <FilterBar onFilterChange={handleFilterChange} />
 
-      {/* Hero Section */}
-      <section className="hero">
-        <h1 className="hero-title">{t('title')}</h1>
-        <p className="hero-subtitle">{t('subtitle')}</p>
-      </section>
-
-      {/* Featured Media Bytes - Leader Speaks */}
-      {mediaBytes.length > 0 && (
-        <section className="mb-8">
-          <div className="section-header">
-            <h2 className="section-title">{t('featuredLeaders')}</h2>
-            <a href="/leader-speaks" className="btn btn-outline btn-sm">
-              {tCommon('viewMore')}
-            </a>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mediaBytes.map((mb) => (
-              <MediaByteCard key={mb.id} mediaByte={mb} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <div className="grid lg:grid-cols-4 gap-8">
-        {/* Main Event Feed */}
-        <div className="lg:col-span-3">
-          <div className="section-header">
-            <h2 className="section-title">{t('latestEvents')}</h2>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="card">
-                  <div className="skeleton" style={{ aspectRatio: '16/9' }} />
-                  <div className="p-4">
-                    <div className="skeleton" style={{ height: '20px', width: '80%', marginBottom: '8px' }} />
-                    <div className="skeleton" style={{ height: '16px', width: '60%' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : events.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {events.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <svg className="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              <h3 className="empty-state-title">{tCommon('noResults')}</h3>
-              <p className="empty-state-text">
-                {tEvents('title')}
-              </p>
-            </div>
+      {/* Main Content with Sidebar */}
+      <div className="home-content-grid">
+        {/* Left side - Main content */}
+        <div className="home-main">
+          {/* Featured Media Bytes - Leader Speaks */}
+          {mediaBytes.length > 0 && (
+            <section className="mb-6">
+              <div className="section-header">
+                <h2 className="section-title">{t('featuredLeaders')}</h2>
+                <a href="/leader-speaks" className="btn btn-outline btn-sm">
+                  {tCommon('viewMore')}
+                </a>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {mediaBytes.map((mb) => (
+                  <MediaByteCard key={mb.id} mediaByte={mb} />
+                ))}
+              </div>
+            </section>
           )}
+
+          {/* Latest Events */}
+          <section>
+            <div className="section-header">
+              <h2 className="section-title">{t('latestEvents')}</h2>
+            </div>
+
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="card">
+                    <div className="skeleton" style={{ aspectRatio: '16/9' }} />
+                    <div className="p-3">
+                      <div className="skeleton" style={{ height: '16px', width: '80%', marginBottom: '6px' }} />
+                      <div className="skeleton" style={{ height: '12px', width: '60%' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : events.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {events.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <svg className="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <h3 className="empty-state-title">{tCommon('noResults')}</h3>
+                <p className="empty-state-text">
+                  {tEvents('title')}
+                </p>
+              </div>
+            )}
+          </section>
         </div>
 
-        {/* Sidebar */}
-        <aside className="lg:col-span-1">
-          <div className="card">
+        {/* Right Sidebar - Most Active Constituencies */}
+        <aside className="home-sidebar">
+          <div className="card sticky-card">
             <div className="card-header">
-              <h3 className="text-lg font-semibold">{t('topConstituencies')}</h3>
+              <h3 className="font-semibold" style={{ fontSize: '0.9rem' }}>🏆 {t('topConstituencies')}</h3>
             </div>
             <div className="card-body">
               {topConstituencies.length > 0 ? (
-                <ul className="space-y-3">
+                <ul className="constituency-list">
                   {topConstituencies.map((item, index) => (
-                    <li key={item.constituency} className="flex items-center justify-between">
-                      <span className="flex items-center gap-2">
-                        <span className="text-primary font-bold">{index + 1}.</span>
-                        <span className="text-sm">{item.constituency}</span>
-                      </span>
-                      <span className="badge badge-info">{item.count}</span>
+                    <li key={item.constituency} className="constituency-item">
+                      <span className="constituency-rank">{index + 1}</span>
+                      <span className="constituency-name">{item.constituency}</span>
+                      <span className="badge badge-info badge-sm">{item.count}</span>
                     </li>
                   ))}
                 </ul>
