@@ -87,9 +87,26 @@ export async function POST(request: NextRequest) {
 
         // If the role is LEADER, create a leader profile
         if (invite.role === 'LEADER') {
+            // Generate slug from name (lowercase, replace spaces with hyphens, remove special chars)
+            const baseSlug = name
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+
+            // Ensure uniqueness by checking existing slugs and appending number if needed
+            let slug = baseSlug;
+            let counter = 1;
+            while (await prisma.leaderProfile.findUnique({ where: { slug } })) {
+                slug = `${baseSlug}-${counter}`;
+                counter++;
+            }
+
             await prisma.leaderProfile.create({
                 data: {
                     userId: user.id,
+                    slug,
                     designation: 'Party Leader',
                     constituency: constituency || null,
                 },
